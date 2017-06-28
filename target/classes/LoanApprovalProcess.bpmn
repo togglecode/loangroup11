@@ -30,17 +30,11 @@
       </bpmn2:extensionElements>
       <bpmn2:outgoing>SequenceFlow_8</bpmn2:outgoing>
     </bpmn2:startEvent>
-    <bpmn2:endEvent id="EndEvent_3">
-      <bpmn2:incoming>SequenceFlow_3</bpmn2:incoming>
-    </bpmn2:endEvent>
     <bpmn2:exclusiveGateway id="ExclusiveGateway_1" name="Approved&#xD;&#xA;">
       <bpmn2:incoming>SequenceFlow_10</bpmn2:incoming>
-      <bpmn2:outgoing>SequenceFlow_3</bpmn2:outgoing>
       <bpmn2:outgoing>SequenceFlow_4</bpmn2:outgoing>
+      <bpmn2:outgoing>SequenceFlow_1</bpmn2:outgoing>
     </bpmn2:exclusiveGateway>
-    <bpmn2:sequenceFlow id="SequenceFlow_3" name="Yes" sourceRef="ExclusiveGateway_1" targetRef="EndEvent_3">
-      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression">${approved}</bpmn2:conditionExpression>
-    </bpmn2:sequenceFlow>
     <bpmn2:sequenceFlow id="SequenceFlow_4" name="NO&#xD;&#xA;" sourceRef="ExclusiveGateway_1" targetRef="UserTask_2">
       <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression">${not approved}</bpmn2:conditionExpression>
     </bpmn2:sequenceFlow>
@@ -87,17 +81,17 @@
               <camunda:constraint name="readonly"/>
             </camunda:validation>
           </camunda:formField>
-          <camunda:formField id="approved" label="Do you approve this requst?" type="boolean"/>
+          <camunda:formField id="approved" label="Do you approve this request?" type="boolean"/>
         </camunda:formData>
       </bpmn2:extensionElements>
       <bpmn2:incoming>SequenceFlow_5</bpmn2:incoming>
       <bpmn2:incoming>SequenceFlow_9</bpmn2:incoming>
       <bpmn2:outgoing>SequenceFlow_10</bpmn2:outgoing>
     </bpmn2:userTask>
-    <bpmn2:userTask id="UserTask_3" camunda:assignee="${requestor}" name="Ger Recomendation">
+    <bpmn2:userTask id="UserTask_3" camunda:assignee="${requestor}" name="Get Recomendation">
       <bpmn2:extensionElements>
         <camunda:formData>
-          <camunda:formField id="recommend" label="Recommendated amount" type="long" defaultValue="10000">
+          <camunda:formField id="Recommend" label="Recommended amount" type="long" defaultValue="10000">
             <camunda:validation>
               <camunda:constraint name="readonly"/>
             </camunda:validation>
@@ -116,6 +110,25 @@
     <bpmn2:sequenceFlow id="SequenceFlow_8" name="" sourceRef="StartEvent_1" targetRef="UserTask_3"/>
     <bpmn2:sequenceFlow id="SequenceFlow_9" name="" sourceRef="UserTask_3" targetRef="UserTask_1"/>
     <bpmn2:sequenceFlow id="SequenceFlow_10" name="" sourceRef="UserTask_1" targetRef="ExclusiveGateway_1"/>
+    <bpmn2:sequenceFlow id="SequenceFlow_1" name="" sourceRef="ExclusiveGateway_1" targetRef="UserTask_4"/>
+    <bpmn2:userTask id="UserTask_4" camunda:assignee="${requestor}" name="Customer satisfaction">
+      <bpmn2:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="rate" label="Please rate your satisfaction with the system (1-5)" type="long">
+            <camunda:validation>
+              <camunda:constraint name="min" config="1"/>
+              <camunda:constraint name="max" config="5"/>
+            </camunda:validation>
+          </camunda:formField>
+        </camunda:formData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>SequenceFlow_1</bpmn2:incoming>
+      <bpmn2:outgoing>SequenceFlow_2</bpmn2:outgoing>
+    </bpmn2:userTask>
+    <bpmn2:sequenceFlow id="SequenceFlow_2" name="" sourceRef="UserTask_4" targetRef="EndEvent_3"/>
+    <bpmn2:endEvent id="EndEvent_3">
+      <bpmn2:incoming>SequenceFlow_2</bpmn2:incoming>
+    </bpmn2:endEvent>
   </bpmn2:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="LoanApprovalProcess">
@@ -132,23 +145,14 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="_BPMNShape_EndEvent_4" bpmnElement="EndEvent_3">
-        <dc:Bounds height="36.0" width="36.0" x="704.0" y="184.0"/>
+        <dc:Bounds height="36.0" width="36.0" x="841.0" y="184.0"/>
         <bpmndi:BPMNLabel>
-          <dc:Bounds height="0.0" width="0.0" x="722.0" y="225.0"/>
+          <dc:Bounds height="0.0" width="0.0" x="859.0" y="225.0"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="_BPMNShape_UserTask_4" bpmnElement="UserTask_2">
         <dc:Bounds height="80.0" width="100.0" x="504.0" y="348.0"/>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_3" bpmnElement="SequenceFlow_3" sourceElement="_BPMNShape_ExclusiveGateway_2" targetElement="_BPMNShape_EndEvent_4">
-        <di:waypoint xsi:type="dc:Point" x="578.0" y="201.0"/>
-        <di:waypoint xsi:type="dc:Point" x="649.0" y="201.0"/>
-        <di:waypoint xsi:type="dc:Point" x="649.0" y="202.0"/>
-        <di:waypoint xsi:type="dc:Point" x="704.0" y="202.0"/>
-        <bpmndi:BPMNLabel>
-          <dc:Bounds height="25.0" width="34.0" x="625.0" y="201.0"/>
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_4" bpmnElement="SequenceFlow_4" sourceElement="_BPMNShape_ExclusiveGateway_2" targetElement="_BPMNShape_UserTask_4">
         <di:waypoint xsi:type="dc:Point" x="553.0" y="226.0"/>
         <di:waypoint xsi:type="dc:Point" x="553.0" y="287.0"/>
@@ -182,6 +186,25 @@
         <di:waypoint xsi:type="dc:Point" x="494.0" y="202.0"/>
         <di:waypoint xsi:type="dc:Point" x="494.0" y="201.0"/>
         <di:waypoint xsi:type="dc:Point" x="528.0" y="201.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_UserTask_6" bpmnElement="UserTask_4">
+        <dc:Bounds height="80.0" width="100.0" x="667.0" y="162.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_1" bpmnElement="SequenceFlow_1" sourceElement="_BPMNShape_ExclusiveGateway_2" targetElement="_BPMNShape_UserTask_6">
+        <di:waypoint xsi:type="dc:Point" x="578.0" y="201.0"/>
+        <di:waypoint xsi:type="dc:Point" x="615.0" y="201.0"/>
+        <di:waypoint xsi:type="dc:Point" x="615.0" y="202.0"/>
+        <di:waypoint xsi:type="dc:Point" x="667.0" y="202.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="6.0" width="6.0" x="647.0" y="202.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_2" bpmnElement="SequenceFlow_2" sourceElement="_BPMNShape_UserTask_6" targetElement="_BPMNShape_EndEvent_4">
+        <di:waypoint xsi:type="dc:Point" x="767.0" y="202.0"/>
+        <di:waypoint xsi:type="dc:Point" x="841.0" y="202.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="6.0" width="6.0" x="806.0" y="202.0"/>
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
